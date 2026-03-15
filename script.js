@@ -1,14 +1,29 @@
+var biggestIndex = 1;
+const allWindows = document.querySelectorAll(".window");
+const allCloseButtons = document.querySelectorAll(".close-btn");
+var topBar = document.querySelector("#topMenu");
+
 setInterval(function () {
   document.querySelector("#timeElement").innerHTML = new Date().toLocaleString();
 }, 1000);
 
-const allWindows = document.querySelectorAll(".window");
-const allCloseButtons = document.querySelectorAll(".close-btn");
-
 allWindows.forEach((win) => {
     dragElement(win);
+    addWindowTapHandling(win);
 });
 
+function addWindowTapHandling(element) {
+  element.addEventListener("mousedown", () =>
+    handleWindowTap(element)
+  )
+}
+
+function handleWindowTap(element) {
+  biggestIndex++; 
+  element.style.zIndex = biggestIndex;
+  topBar.style.zIndex = biggestIndex + 1;
+  deselectIcon(selectedIcon)
+}
 
 allCloseButtons.forEach((btn) => {
   btn.addEventListener("click", function() {
@@ -16,15 +31,21 @@ allCloseButtons.forEach((btn) => {
    closeWindow(windowToClose);
   });
 });
+
 function closeWindow(elmnt) {
   elmnt.style.display = "none"
 }
-function openWindow(elmnt) {
-  elmnt.style.display = "block"
+
+function openWindow(element) {
+  element.style.display = "flex";
+  biggestIndex++;
+  element.style.zIndex = biggestIndex;
+  topBar.style.zIndex = biggestIndex + 1;
 }
+
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    var header = elmnt.querySelector(".window-header");
+  var header = elmnt.querySelector(".window-header");
 
   if (header) {
     header.onmousedown = dragMouseDown;
@@ -55,5 +76,24 @@ function dragElement(elmnt) {
   function stopDragging() {
     document.onmouseup = null;
     document.onmousemove = null;
+  }
+}
+
+function selectIcon(element) {
+  element.classList.add("selected");
+  selectedIcon = element
+} 
+
+function deselectIcon(element) {
+  element.classList.remove("selected");
+  selectedIcon = undefined
+}
+
+function handleIconTap(element) {
+  if (element.classList.contains("selected")) {
+    deselectIcon(element)
+    openWindow(window)
+  } else {
+    selectIcon(element)
   }
 }
