@@ -7,48 +7,58 @@
 <body>
 
     <div id="topMenu">
-        <p class="menu-title">
-            Sanas OS hehe
-        </p> 
+        <div style="display: flex; gap: 16px; margin-left: 16px; align-items: center;">
+            <span style="font-weight: 800; font-size: 16px;"></span>
+            <span style="font-weight: 600;">Sanas OS</span>
+            <span>File</span>
+            <span>Edit</span>
+            <span>View</span>
+            <span>Window</span>
+            <span>Help</span>
+        </div>
         <p id="timeElement">
             25:61
         </p>
     </div>
-    <div class="desktop-app" style="padding-top: 64px; padding-left: 16px;">
-		<div style="text-align: center; padding: 16px; filter: drop-shadow(0 0 8px black); width: fit-content">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmi8xobwEdy58MmnKQsnDV_WERBrvv73mcNw&s" style="width: 64px; height: 64px; border-radius: 16px;">
-        <p style="margin: 0px; color: #fff; ">Notes</p>
+
+    <div class="desktop-app" onclick="handleIconTap(this)" data-window="notesWindow">
+        <div class="app-icon-container">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmi8xobwEdy58MmnKQsnDV_WERBrvv73mcNw&s" class="app-icon">
+            <p class="app-name">Notes</p>
         </div>
-	</div>
-    <div class="window" id="welcomeWindow">
-        <div id="welcomeWindowHandle" class="window-header">
-            <button class="close-btn">X Close</button>  
-            Handle
-        </div>
-
-        <h2>About Me</h2>
-
-        <p>Hi! I'm Sana. I procrasinate, a LOT.</p>
-
-        <img class="profile-pic" src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg">
-        <p>The photo above is a dog</p>
-
-        <p>
-            Check out my <a href="https://github.com/">GitHub??? why not</a>
-        </p>
-
     </div>
 
-    <div class="window" id="notesWindow">
-        <div id="notesWindowHandle" class="window-header">
-            <button class="close-btn">X Close</button>  
-            Handle
+    <div class="window" id="welcomeWindow">
+        <div id="welcomeWindowHandle" class="window-header">
+            <div class="traffic-lights">
+                <div class="traffic-light close-btn"></div>
+                <div class="traffic-light min-btn"></div>
+                <div class="traffic-light max-btn"></div>
+            </div>
+            <div class="window-title">About Me</div>
         </div>
+        <div class="window-content">
+            <h2>About Me</h2>
+            <p>Hi! I'm Sana. I procrasinate, a LOT.</p>
+            <img class="profile-pic" src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg">
+            <p>The photo above is a dog</p>
+            <p>Check out my <a href="https://github.com/">GitHub??? why not</a></p>
+        </div>
+    </div>
 
-        <h2>This is a notes app</h2>
-
-        <p>and this is a note</p>
-
+    <div class="window" id="notesWindow" style="display: none;">
+        <div id="notesWindowHandle" class="window-header">
+            <div class="traffic-lights">
+                <div class="traffic-light close-btn"></div>
+                <div class="traffic-light min-btn"></div>
+                <div class="traffic-light max-btn"></div>
+            </div>
+            <div class="window-title">Notes</div>
+        </div>
+        <div class="window-content">
+            <h2>This is a notes app</h2>
+            <p>and this is a note</p>
+        </div>
     </div>
 
 </body>

@@ -2,9 +2,14 @@ var biggestIndex = 1;
 const allWindows = document.querySelectorAll(".window");
 const allCloseButtons = document.querySelectorAll(".close-btn");
 var topBar = document.querySelector("#topMenu");
+var selectedIcon = undefined;
 
 setInterval(function () {
-  document.querySelector("#timeElement").innerHTML = new Date().toLocaleString();
+  const timeOpts = { hour: 'numeric', minute: '2-digit', hour12: true };
+  const dateOpts = { weekday: 'short', month: 'short', day: 'numeric' };
+  const now = new Date();
+  document.querySelector("#timeElement").innerHTML = 
+    now.toLocaleDateString('en-US', dateOpts) + " " + now.toLocaleTimeString('en-US', timeOpts);
 }, 1000);
 
 allWindows.forEach((win) => {
@@ -13,16 +18,16 @@ allWindows.forEach((win) => {
 });
 
 function addWindowTapHandling(element) {
-  element.addEventListener("mousedown", () =>
-    handleWindowTap(element)
-  )
+  element.addEventListener("mousedown", () => handleWindowTap(element));
 }
 
 function handleWindowTap(element) {
   biggestIndex++; 
   element.style.zIndex = biggestIndex;
   topBar.style.zIndex = biggestIndex + 1;
-  deselectIcon(selectedIcon)
+  if (selectedIcon) {
+    deselectIcon(selectedIcon);
+  }
 }
 
 allCloseButtons.forEach((btn) => {
@@ -33,14 +38,17 @@ allCloseButtons.forEach((btn) => {
 });
 
 function closeWindow(elmnt) {
-  elmnt.style.display = "none"
+  elmnt.style.display = "none";
 }
 
-function openWindow(element) {
-  element.style.display = "flex";
-  biggestIndex++;
-  element.style.zIndex = biggestIndex;
-  topBar.style.zIndex = biggestIndex + 1;
+function openWindow(windowId) {
+  const element = document.getElementById(windowId);
+  if (element) {
+    element.style.display = "flex";
+    biggestIndex++;
+    element.style.zIndex = biggestIndex;
+    topBar.style.zIndex = biggestIndex + 1;
+  }
 }
 
 function dragElement(elmnt) {
@@ -54,12 +62,14 @@ function dragElement(elmnt) {
   }
 
   function dragMouseDown(e) {
+    if (e.target.classList.contains('traffic-light')) return;
     e = e || window.event;
     e.preventDefault();
     pos3 = e.clientX;
     pos4 = e.clientY;
     document.onmouseup = stopDragging;
     document.onmousemove = elementDrag;
+    handleWindowTap(elmnt);
   }
 
   function elementDrag(e) {
@@ -80,20 +90,30 @@ function dragElement(elmnt) {
 }
 
 function selectIcon(element) {
-  element.classList.add("selected");
-  selectedIcon = element
+  element.querySelector('.app-icon-container').classList.add("selected");
+  selectedIcon = element;
 } 
 
 function deselectIcon(element) {
-  element.classList.remove("selected");
-  selectedIcon = undefined
+  if (element) {
+    element.querySelector('.app-icon-container').classList.remove("selected");
+    selectedIcon = undefined;
+  }
 }
 
 function handleIconTap(element) {
-  if (element.classList.contains("selected")) {
-    deselectIcon(element)
-    openWindow(window)
+  const targetWindow = element.getAttribute("data-window");
+  if (selectedIcon === element) {
+    deselectIcon(element);
+    openWindow(targetWindow);
   } else {
-    selectIcon(element)
+    if (selectedIcon) deselectIcon(selectedIcon);
+    selectIcon(element);
   }
 }
+
+document.addEventListener("mousedown", (e) => {
+  if (!e.target.closest(".desktop-app") && selectedIcon) {
+    deselectIcon(selectedIcon);
+  }
+});
