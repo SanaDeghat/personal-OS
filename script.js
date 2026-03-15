@@ -117,3 +117,56 @@ document.addEventListener("mousedown", (e) => {
     deselectIcon(selectedIcon);
   }
 });
+
+
+function createWindow(id, title, contentHTML, startX, startY) {
+  const win = document.createElement("div");
+  win.className = "window";
+  win.id = id;
+  win.style.left = startX + "px";
+  win.style.top = startY + "px";
+  win.style.display = "none"; 
+  win.innerHTML = `
+    <div class="window-header">
+        <div class="traffic-lights">
+            <div class="traffic-light close-btn"></div>
+            <div class="traffic-light min-btn"></div>
+            <div class="traffic-light max-btn"></div>
+        </div>
+        <div class="window-title">${title}</div>
+    </div>
+    <div class="window-content">
+        ${contentHTML}
+    </div>
+  `;
+  document.body.appendChild(win);
+  dragElement(win);
+  addWindowTapHandling(win);
+  const closeBtn = win.querySelector(".close-btn");
+  closeBtn.addEventListener("click", () => closeWindow(win));
+  return win;
+}
+
+
+//window create.
+createWindow(
+  "welcomeWindow", 
+  "About Me",      
+  `<h2>About Me</h2>
+    <p>Hi! I'm Sana. I procrasinate, a LOT.</p>
+    <img class="profile-pic" src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg">
+    <p>The photo above is a dog</p>
+    <p>Check out my <a href="https://github.com/">GitHub??? why not</a></p>
+  `, 
+  200, 150 
+);
+
+createWindow(
+  "notesWindow", 
+  "Notes", 
+  `<h2>This is a notes app</h2>
+    <p>and this is a note</p>`,
+  100, 100
+);
+
+openWindow("welcomeWindow");
