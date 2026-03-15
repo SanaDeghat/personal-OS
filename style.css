@@ -1,10 +1,65 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-image: url('https://user-cdn.hackclub-assets.com/019ce5ea-b6ec-78ca-9dd3-44a0c68c4eb5/Illustration3.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+#topMenu {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    justify-content: space-between;
+}
+
+.menu-title {
+    margin-left: 16px;
+}
+
+#timeElement {
+    margin-right: 16px;
+}
+
 .window {
-            position: absolute; 
-            top: 60px; 
-            left: 20px;
-            border: solid 1px;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            width: fit-content;
-        }
+    position: absolute; 
+    top: 60px; 
+    left: 20px;
+    border: solid 1px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.window-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: move;
+    background-color: #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    user-select: none; 
+    margin-bottom: 15px;
+}
+
+.close-btn {
+    float: left;
+    cursor: pointer;
+    position: absolute; 
+    left: 25px;
+}
+
+.profile-pic {
+    width: 120px; 
+    height: 120px; 
+    border-radius: 50%;
+}

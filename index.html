@@ -1,39 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-     <script src="script.js" defer></script>
+    <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body style="margin: 0; min-height: 100vh; background-image: url('https://user-cdn.hackclub-assets.com/019ce5ea-b6ec-78ca-9dd3-44a0c68c4eb5/Illustration3.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
-      
+<body>
 
-    <div is="topMenu" style="position: absolute; width: 100%; display: flex; backdrop-filter: blur(10px); background-color: rgba(0, 0, 0, 0.25); color: #fff; justify-content: space-between;">
-        
-        <p style="margin-left: 16px;">
+    <div id="topMenu">
+        <p class="menu-title">
             Sanas OS hehe
         </p> 
         <p id="timeElement">
             25:61
         </p>
     </div>
+
     <div class="window" id="welcomeWindow">
-        <div id="welcomeWindowHandle"  class="window-handle"
-      style="width: 100%; display: flex; align-items: center; cursor: move; justify-content: center;"> handle</div>
+        <div id="welcomeWindowHandle" class="window-header">
+            <button class="close-btn">X Close</button>  
+            Handle
+        </div>
 
         <h2>About Me</h2>
 
         <p>Hi! I'm Sana. I procrasinate, a LOT.</p>
 
-        <img style="width:120px; height:120px; border-radius:50%;" 
-        src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg">
+        <img class="profile-pic" src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg">
         <p>The photo above is a dog</p>
 
-
         <p>
-        Check out my
-        <a href="https://github.com/">GitHub??? why not</a>
+            Check out my <a href="https://github.com/">GitHub??? why not</a>
         </p>
     </div>
-</body>
 
+</body>
 </html>

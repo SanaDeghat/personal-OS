@@ -3,11 +3,25 @@ setInterval(function () {
 }, 1000);
 
 const allWindows = document.querySelectorAll(".window");
+const allCloseButtons = document.querySelectorAll(".close-btn");
 
 allWindows.forEach((win) => {
     dragElement(win);
 });
 
+
+allCloseButtons.forEach((btn) => {
+  btn.addEventListener("click", function() {
+   const windowToClose = this.closest(".window");
+   closeWindow(windowToClose);
+  });
+});
+function closeWindow(elmnt) {
+  elmnt.style.display = "none"
+}
+function openWindow(elmnt) {
+  elmnt.style.display = "block"
+}
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     var header = elmnt.querySelector(".window-header");
