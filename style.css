@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
 body {
     margin: 0;
     min-height: 100vh;
@@ -6,7 +8,8 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Patrick Hand', cursive, sans-serif;
+    font-size: 18px;
     overflow: hidden;
 }
 
@@ -14,127 +17,172 @@ body {
     position: absolute;
     top: 0;
     width: 100%;
-    height: 28px;
+    height: 32px;
     display: flex;
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(5px);
-    background-color: rgba(202, 232, 255, 0.163);
-    color: #000;
+    background-color: #fdfbf7; 
+    color: #111;
     justify-content: space-between;
     align-items: center;
-    font-size: 13px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
     z-index: 9999;
 }
 
+#topMenu::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #111;
+    filter: url(#crayon); 
+    pointer-events: none;
+}
+
 #timeElement {
-    margin-right: 16px;
+    margin-right: 20px;
     margin-top: 0;
     margin-bottom: 0;
-    font-weight: 500;
+    font-weight: bold;
 }
 
 .desktop-app {
     position: absolute;
-    top: 40px;
-    right: 20px;
-    width: 80px;
-    cursor: default;
+    width: 90px;
+    cursor: pointer;
 }
 
 .app-icon-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 4px;
-    border-radius: 8px;
-    transition: background-color 0.1s;
+    padding: 8px;
+    transition: transform 0.1s;
 }
 
 .app-icon-container.selected {
-    background-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8);
+    border: 2px solid #111;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; /* Wobbly shape */
 }
 
 .app-icon {
-    width: 56px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8);
+    border: 2px solid #111;
 }
 
 .app-name {
-    margin: 4px 0 0 0;
+    margin: 8px 0 0 0;
     color: #fff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-    font-size: 12px;
+    text-shadow: 2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
+    font-size: 16px;
     text-align: center;
-    font-weight: 500;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 100%;
+    letter-spacing: 1px;
 }
 
 .window {
     position: absolute; 
-    top: 100px; 
-    left: 150px;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 10px;
+    background-color: #fdfbf7; 
     width: fit-content;
     min-width: 350px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 0.5px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.8);
     display: flex;
     flex-direction: column;
+    border-radius: 4px;
+}
+
+.window::after {
+    content: "";
+    position: absolute;
+    top: -3px; 
+    left: -3px; 
+    right: -3px; 
+    bottom: -3px;
+    border: 4px solid #111; 
+    border-radius: 8px;
+    pointer-events: none;
+    filter: url(#crayon); 
+    z-index: 10;
 }
 
 .window-header {
     width: 100%;
-    height: 28px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: default;
+    cursor: grab;
     background-color: transparent;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 10px 10px 0 0;
     user-select: none;
     position: relative;
 }
 
+.window-header:active {
+    cursor: grabbing;
+}
+
+.window-header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #111;
+    filter: url(#crayon);
+    pointer-events: none;
+}
+
 .window-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #4d4d4d;
+    font-size: 20px;
+    font-weight: bold;
+    color: #111;
+    letter-spacing: 1px;
 }
 
 .traffic-lights {
     position: absolute;
-    left: 12px;
+    left: 14px;
     display: flex;
     gap: 8px;
 }
 
 .traffic-light {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    filter: url(#crayon);
+    border: 2px solid #111;
+    cursor: pointer;
 }
 
 .close-btn { background-color: #ff5f56; }
 .close-btn:active { background-color: #c14645; }
 .min-btn { background-color: #ffbd2e; }
-.min-btn:active { background-color: #bf9122; }
 .max-btn { background-color: #27c93f; }
-.max-btn:active { background-color: #1d9730; }
+
 
 .window-content {
     padding: 20px;
     flex-grow: 1;
+    color: #222;
+}
+
+.window-content h2 {
+    margin-top: 0;
+    font-size: 28px;
+    border-bottom: 2px dashed #ccc;
+    padding-bottom: 5px;
+}
+
+.window-content a {
+    color: #2e5eff;
+    text-decoration: none;
+    border-bottom: 2px solid #2e5eff;
 }
 
 .profile-pic {
@@ -142,4 +190,7 @@ body {
     height: 120px; 
     border-radius: 50%;
     object-fit: cover;
+    /* Sketchy border around the image */
+    border: 3px solid #111;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8);
 }
