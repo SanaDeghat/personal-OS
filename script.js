@@ -3,7 +3,7 @@ const dockApps = document.querySelectorAll(".dock-app");
 const dockInner = document.querySelector(".dock-inner");
 var topBar = document.querySelector("#topMenu");
 var selectedIcon = undefined;
-
+const googleDriveApiCred= "637366201812-qa2c55cdjf64e4larta75sraegmdvucv.apps.googleusercontent.com"
 const musicLibrary = [
   {
     id: "m1",
@@ -879,3 +879,65 @@ createWindow(
 setupDock();
 initMusicApp();
 openWindow("musicWindow");
+
+createWindow(
+  "photosWindow",
+  "Photos",
+  `<div class="photos-app-shell" style="height: 100%; display: flex; flex-direction: column;">
+    <div class="photos-header">
+      <span id="photosStatus" style="font-size: 14px; color: #fff;">Loading photos...</span>
+    </div>
+    <div id="photosGallery" class="photos-gallery"></div>
+  </div>`,
+  250, 100, 700, 500
+);
+var GOOGLE_API_KEY = "AIzaSyBZL5XH_2Y1VeW1rpsjp5xNNP2k7Odg9ww";
+var FOLDER_ID = "1qZx2dftDi5gfXB6uMNWacgArf9uva3RZ"; 
+async function initPhotosApp() {
+  const gallery = document.getElementById("photosGallery");
+  const status = document.getElementById("photosStatus");
+  
+  try {
+    const query = `'${FOLDER_ID}' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed = false`;
+    const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name,mimeType,thumbnailLink,webContentLink)&key=${GOOGLE_API_KEY}`;
+    
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (data.error) {
+      status.innerText = "Error: " + data.error.message;
+      return;
+    }
+
+    const files = data.files || [];
+    
+    if (files.length === 0) {
+      status.innerText = "No photos or videos found in this folder.";
+      return;
+    }
+
+    status.innerText = `${files.length} items loaded.`;
+
+    files.forEach(file => {
+      const item = document.createElement("div");
+      
+      if (file.mimeType.includes('image')) {
+        const imgUrl = file.thumbnailLink ? file.thumbnailLink.replace('=s220', '=s800') : '';
+        item.innerHTML = `<img src="${imgUrl}" alt="${file.name}" loading="lazy" />`;
+      } else if (file.mimeType.includes('video')) {
+        item.innerHTML = `
+          <video controls preload="metadata">
+             <source src="${file.webContentLink}" type="${file.mimeType}">
+          </video>`;
+      }
+      gallery.appendChild(item);
+    });
+
+  } catch (err) {
+    status.innerText = "Error loading files.";
+    console.error(err);
+  }
+}
+
+initPhotosApp();
+openWindow("photosWindow");
