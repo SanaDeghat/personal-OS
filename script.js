@@ -13,6 +13,15 @@ const musicLibrary = [
     addedAt: "2026-03-14",
     artwork: "music/cover/normal_album.jpg",
     src: "music/Marsha_Thankk_You_for_the_Dialectics.m4a"
+  },
+  {
+    id: "m2",
+    title: "The Great Comet of 1812",
+    artist: "Josh Groban",
+    album: "TNatasha, Pierre & the Great Comet of 1812",
+    addedAt: "2026-03-25",
+    artwork: "music/cover/Natasha,_Pierre_and_The_Great_Comet_of_1812.jpg",
+    src: "music/The_Great_Comet_of_1812_Josh_Groban_Original_Broadway_Compan.mp3"
   }
 ];
 
@@ -879,65 +888,122 @@ createWindow(
 setupDock();
 initMusicApp();
 openWindow("musicWindow");
+// --- Replace the bottom part of your script.js with this ---
 
 createWindow(
   "photosWindow",
   "Photos",
-  `<div class="photos-app-shell" style="height: 100%; display: flex; flex-direction: column;">
-    <div class="photos-header">
-      <span id="photosStatus" style="font-size: 14px; color: #fff;">Loading photos...</span>
-    </div>
-    <div id="photosGallery" class="photos-gallery"></div>
+  `<div class="photos-app-shell">
+    <aside class="photos-sidebar" id="photosSidebar">
+      <div class="photos-section-title">Library</div>
+      <div class="photos-nav active" data-folder-id="ROOT">All Photos</div>
+      <div class="photos-section-title">Albums</div>
+      <div id="photosAlbumList">Loading...</div>
+    </aside>
+    <section class="photos-main">
+      <div class="photos-header">
+        <h2 class="photos-header-title" id="photosHeaderTitle">All Photos</h2>
+      </div>
+      <div id="photosGallery" class="photos-gallery">
+        <p style="padding: 20px;">Select an album to view photos...</p>
+      </div>
+    </section>
   </div>`,
-  250, 100, 700, 500
+  250, 100, 780, 520
 );
+
 var GOOGLE_API_KEY = "AIzaSyBZL5XH_2Y1VeW1rpsjp5xNNP2k7Odg9ww";
 var FOLDER_ID = "1qZx2dftDi5gfXB6uMNWacgArf9uva3RZ"; 
-async function initPhotosApp() {
+
+async function fetchDriveItems(query) {
+  const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name,mimeType,thumbnailLink,webContentLink)&key=${GOOGLE_API_KEY}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.files || [];
+}
+
+async function loadPhotosGallery(folderId, title) {
   const gallery = document.getElementById("photosGallery");
-  const status = document.getElementById("photosStatus");
+  const header = document.getElementById("photosHeaderTitle");
+  
+  header.innerText = title;
+  gallery.innerHTML = `<p style="padding: 20px;">Loading media...</p>`;
   
   try {
-    const query = `'${FOLDER_ID}' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed = false`;
-    const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name,mimeType,thumbnailLink,webContentLink)&key=${GOOGLE_API_KEY}`;
+    const query = `'${folderId}' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed = false`;
+    const files = await fetchDriveItems(query);
     
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    if (data.error) {
-      status.innerText = "Error: " + data.error.message;
-      return;
-    }
-
-    const files = data.files || [];
-    
+    gallery.innerHTML = "";
     if (files.length === 0) {
-      status.innerText = "No photos or videos found in this folder.";
+      gallery.innerHTML = `<p style="padding: 20px;">No photos or videos found.</p>`;
       return;
     }
-
-    status.innerText = `${files.length} items loaded.`;
 
     files.forEach(file => {
       const item = document.createElement("div");
+      item.className = "photos-gallery-item";
       
       if (file.mimeType.includes('image')) {
         const imgUrl = file.thumbnailLink ? file.thumbnailLink.replace('=s220', '=s800') : '';
         item.innerHTML = `<img src="${imgUrl}" alt="${file.name}" loading="lazy" />`;
       } else if (file.mimeType.includes('video')) {
         item.innerHTML = `
-          <video controls preload="metadata">
+          <video preload="metadata" muted loop onmouseover="this.play()" onmouseout="this.pause()">
              <source src="${file.webContentLink}" type="${file.mimeType}">
           </video>`;
       }
       gallery.appendChild(item);
     });
+  } catch (err) {
+    gallery.innerHTML = `<p style="padding: 20px; color: red;">Error: ${err.message}</p>`;
+  }
+}
+
+async function initPhotosApp() {
+  const albumList = document.getElementById("photosAlbumList");
+  
+  try {
+    // 1. Fetch folders (Albums) inside the main directory
+    const folderQuery = `'${FOLDER_ID}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`;
+    const folders = await fetchDriveItems(folderQuery);
+    
+    albumList.innerHTML = "";
+    if (folders.length === 0) {
+      albumList.innerHTML = `<div style="padding: 8px; font-size: 14px; opacity: 0.6;">No albums found</div>`;
+    } else {
+      folders.forEach(folder => {
+        const navItem = document.createElement("div");
+        navItem.className = "photos-nav";
+        navItem.innerText = folder.name;
+        navItem.dataset.folderId = folder.id;
+        albumList.appendChild(navItem);
+      });
+    }
+
+    // 2. Setup Sidebar Click Listeners
+    const sidebar = document.getElementById("photosSidebar");
+    sidebar.addEventListener("click", (e) => {
+      if (e.target.classList.contains("photos-nav")) {
+        // Handle active states
+        sidebar.querySelectorAll(".photos-nav").forEach(nav => nav.classList.remove("active"));
+        e.target.classList.add("active");
+        
+        // Load the gallery
+        const targetFolderId = e.target.dataset.folderId === "ROOT" ? FOLDER_ID : e.target.dataset.folderId;
+        loadPhotosGallery(targetFolderId, e.target.innerText);
+      }
+    });
+
+    // 3. Load root directory by default
+    loadPhotosGallery(FOLDER_ID, "All Photos");
 
   } catch (err) {
-    status.innerText = "Error loading files.";
+    albumList.innerHTML = `<div style="padding: 8px; color: red;">Failed to load albums</div>`;
     console.error(err);
   }
 }
 
+// Initialize on load
 initPhotosApp();
 openWindow("photosWindow");
