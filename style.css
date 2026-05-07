@@ -234,12 +234,10 @@ body {
     transform-origin: bottom center;
     transition: transform 90ms linear;
 }
-/* Photos App Styles */
 .photos-app-shell {
-    display: grid;
-    grid-template-columns: 210px 1fr;
+    display: flex;
+    grid-template-columns: 1px 1fr;
     height: 100%;
-    min-height: 0;
     flex: 1 1 auto;
     background: #fdfbf7;
 }
@@ -314,25 +312,21 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 12px;
     overflow-y: auto;
-    flex: 1;
+    flex: 2;
 }
 
 .photos-gallery-item {
     width: 100%;
     aspect-ratio: 1 / 1;
-    border-radius: 12px;
     border: 2px solid #111;
-    overflow: hidden;
     box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.6);
-    transition: transform 140ms ease, box-shadow 140ms ease;
     cursor: pointer;
-    background: #eee;
 }
 
-.photos-gallery-item:hover {
+/*.photos-gallery-item:hover {
     transform: translateY(-2px);
     box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.65);
-}
+}*/
 
 .photos-gallery-item img,
 .photos-gallery-item video {

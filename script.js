@@ -888,7 +888,6 @@ createWindow(
 setupDock();
 initMusicApp();
 openWindow("musicWindow");
-// --- Replace the bottom part of your script.js with this ---
 
 createWindow(
   "photosWindow",
@@ -964,7 +963,6 @@ async function initPhotosApp() {
   const albumList = document.getElementById("photosAlbumList");
   
   try {
-    // 1. Fetch folders (Albums) inside the main directory
     const folderQuery = `'${FOLDER_ID}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`;
     const folders = await fetchDriveItems(folderQuery);
     
@@ -981,21 +979,17 @@ async function initPhotosApp() {
       });
     }
 
-    // 2. Setup Sidebar Click Listeners
     const sidebar = document.getElementById("photosSidebar");
     sidebar.addEventListener("click", (e) => {
       if (e.target.classList.contains("photos-nav")) {
-        // Handle active states
         sidebar.querySelectorAll(".photos-nav").forEach(nav => nav.classList.remove("active"));
         e.target.classList.add("active");
         
-        // Load the gallery
         const targetFolderId = e.target.dataset.folderId === "ROOT" ? FOLDER_ID : e.target.dataset.folderId;
         loadPhotosGallery(targetFolderId, e.target.innerText);
       }
     });
 
-    // 3. Load root directory by default
     loadPhotosGallery(FOLDER_ID, "All Photos");
 
   } catch (err) {
@@ -1004,6 +998,5 @@ async function initPhotosApp() {
   }
 }
 
-// Initialize on load
 initPhotosApp();
 openWindow("photosWindow");
